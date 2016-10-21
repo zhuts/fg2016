@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+  <head>
+    <meta charset="UTF-8">
+    <title>angular meal planner</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body ng-controller="MainController">
+
+    <section class="demo">
+    <h1> Friendsgiving 2016 signup </h1>
+
+      <input type="text"
+        class="meal-input"
+        placeholder="new course"
+        ng-model="newMealCourse"
+        required>
+      <input type="text"
+        class="name-input"
+        placeholder="name"
+        ng-model="newMealName"
+        required>
+      <button ng-click="addCourse(newMealCourse, newMealName, newMealType);"> add </button>
+
+      <h3 ng-if="!courses.length"> Nothing signed up for... yet   </h3>
+      <ul>
+        <li ng-repeat="course in courses" >
+          <h3>{{ course.title }} - {{ course.name }}</h3>
+          <button ng-click="deleteCourse($index)" > delete course </button>
+        </li>
+      </ul>
+    </section>
+
+<!--     <section class="code">
+      <h1>$rootScope.meal</h1>
+      <pre>{{ courses | json }}</pre>
+    </section> -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
