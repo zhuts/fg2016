@@ -1,49 +1,47 @@
 angular.module('app', [])
 
-.controller('MainController', function($scope, Meal){
-    angular.extend($scope, Meal);
-    // $scope.getReddit = function(){
-    //   Reddit.getData()
-    //     .then(function(data){
-    //       $scope.reddit = data;
-    //     })
-    //     .catch(function(err) {
-    //       console.error(err);
-    //     })
-    // }
-})//no semi-colon
+.controller('MainController', function($scope, socket){
+  $scope.loading = true;
+  $scope.courses = [];
 
-.factory('Meal', function(){
-  var courses = [];
-  var addCourse = function(course, name, type){
-    courses.push({title: course, name: name, type: type}); 
-  };  
-  var deleteCourse = function(index){
-    courses.splice(index,1);
-  }; 
+  socket.on('retrieveCourses', function(data, msg) {
+    $scope.courses = data.courses;
+  })
 
-  return {
-    courses: courses,
-    addCourse: addCourse,
-    deleteCourse: deleteCourse,
-  };
 })
 
-// .factory("Reddit", function($http){
-//   var getData = function(){
-//     return $http({
-//       method:'GET',
-//       url: 'https://www.reddit.com/.json'
-//     })
-//     .then(function(res){
-//       return res.data;
-//     });
-//   };
+.factory('socket', function ($rootScope) {
+  // For development testing need to set it to use 'http://' since localhost uses http
+  // For production, can use either http or https but the web address will have to match it
+  var socket = io.connect('http://' + window.location.hostname + ":" + location.port);
+  console.log('http://' + window.location.hostname + ":" + location.port);
+  // Error handling can be applied passing in a callback when executing socket methods on or emit
+  var on = function (eventName, callback) {
+    socket.on(eventName, function () {  
+      var args = arguments;
+      $rootScope.$apply(function () {
+        callback.apply(socket, args);
+      });
+    });
+  };
 
-//   return {
-//     getData: getData
-//   }
-// });
+  var emit = function (eventName, data, callback) {
+    socket.emit(eventName, data, function () {
+      var args = arguments;
+      $rootScope.$apply(function () {
+        if (callback) {
+          callback.apply(socket, args);
+        }
+      });
+    });
+  };
+
+  return {
+    on: on,
+    emit: emit
+  };
+});
+
 
 
 

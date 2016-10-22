@@ -1,9 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="en" ng-app="app">
   <head>
     <meta charset="UTF-8">
     <title>angular meal planner</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="main.js" ></script>
   </head>
   <body ng-controller="MainController">
 
@@ -35,7 +39,5 @@
       <h1>$rootScope.meal</h1>
       <pre>{{ courses | json }}</pre>
     </section> -->
-    <script src="node_modules/angular/angular.js"></script>
-    <script src="app.js"></script>
   </body>
 </html>

@@ -1,9 +1,9 @@
-var course = require('./models/course');
+var Course = require('./models/course');
 
 module.exports = function(app) {
 
   app.get('*', function(req, res) {
-    res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+    res.sendFile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
   });
 
   //get all courses
@@ -20,8 +20,7 @@ module.exports = function(app) {
   app.post('/api/meals', function(req, res){
     Course.create({
       title: req.body.title,
-      name: req.body.name,
-      type: req.body.type
+      name: req.body.name
     }, function(err, course){
       if(err){
         res.send(err);
