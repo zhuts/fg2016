@@ -9,6 +9,10 @@ var database = require('./config/database');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 
+//mealdata object
+
+var mealData = {};
+
 mongoose.connect(database.url);   // connect to mongoDB database on modulus.io
 app.use(express.static('public'));
 app.use(morgan('combined'));             // log every request to the console
@@ -20,6 +24,11 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  socket.emit('updateMeal', mealData);
+});
+
+io.on('changeToMeal', function(){
+  console.log("changeToMeal");
 });
 
 

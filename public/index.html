@@ -4,40 +4,96 @@
   <head>
     <meta charset="UTF-8">
     <title>angular meal planner</title>
+    <link rel="stylesheet" href="https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.1/angular-material.css">
+    <link rel="stylesheet" href="https://material.angularjs.org/1.1.1/docs.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script src="main.js" ></script>
+
   </head>
-  <body ng-controller="MainController">
+  
+  <body ng-controller="MainController" ng-cloak="">
 
-    <section class="demo">
-    <h1> Friendsgiving 2016 signup </h1>
+      <md-toolbar layout="row" layout-align="end center" >
+        <div class="md-toolbar-tools" >
 
-      <input type="text"
-        class="meal-input"
-        placeholder="new course"
-        ng-model="newMealCourse"
-        required>
-      <input type="text"
-        class="name-input"
-        placeholder="name"
-        ng-model="newMealName"
-        required>
-      <button ng-click="addCourse(newMealCourse, newMealName, newMealType);"> add </button>
+          <h2 class="title">
+            Friendsgiving 2016  
+          </h2>
 
-      <h3 ng-if="!courses.length"> Nothing signed up for... yet   </h3>
-      <ul>
-        <li ng-repeat="course in courses" >
-          <h3>{{ course.title }} - {{ course.name }}</h3>
-          <button ng-click="deleteCourse($index)" > delete course </button>
-        </li>
-      </ul>
-    </section>
+          <span flex="auto" class="name-input" >
+            <md-input-container class="name-input-container" flex>
+              <input ng-model="currentUser"
+                type="text"
+                placeholder="name"
+                max-rows=1
+                md-maxlength=20
+                >
+            </md-input-container>
+            
+            <md-button class="md-raised"
+              ng-click="login(currentUser);"
+              >
+              Sign In
+            </md-button> 
+          </span>
 
-<!--     <section class="code">
-      <h1>$rootScope.meal</h1>
-      <pre>{{ courses | json }}</pre>
-    </section> -->
+        </div>
+      </md-toolbar>
+      
+      <md-content layout="row" layout-align="center center">
+        <md-input-container>
+          <input type="text"
+            class="meal-input"
+            placeholder="food"
+            ng-model="newFood"
+            max-rows=1
+            md-maxlength=40
+            required>
+        </md-input-container>
+
+        <md-input-container>
+          <md-select ng-model="newCourse"
+            placeholder="select course"
+            >
+            <md-option value="main">Main</md-option>
+            <md-option value="side">Side</md-option>
+            <md-option value="dessert">Dessert</md-option>
+            <md-option value="other">Other</md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-button ng-click="addFood(newFood, newCourse);"
+          ng-disabled="!user"
+          class="md-raised"
+          > add </md-button>
+      </md-content>
+
+      <h3 ng-if="!coursesArray.length"> Nothing signed up for... yet</h3>
+      <md-list layout="column" layout-align="center center">
+        <md-list-item ng-repeat="food in coursesArray track by $index" >
+        <div class="md-list-item-text" layout="column"> 
+          <div layout="row">
+            <h3>{{ food.food }}</h3>           
+            <h4>{{ food.course }}</h4>
+          </div>
+          <div layout="row">
+            <h4>{{ food.user }}</h4>
+            <md-button class="md-raised" ng-click="removeFood($index)"> delete course </md-button>
+          </div>
+        </div>
+        </md-list-item>
+      </md-list>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js"></script>
+    <!-- Angular Material Library -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+    <script src="main.js" ></script>
   </body>
 </html>

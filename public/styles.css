@@ -1,0 +1,19 @@
+.md-toolbar {
+}
+
+.name-input {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  height: 90%;
+}
+
+.name-input-container {
+  height: 100%;
+  background-color: white;
+}
+
+.title {
+  padding-right: 20px;
+}
+
