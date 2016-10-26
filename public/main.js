@@ -1,22 +1,36 @@
-angular.module('app', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache'])
+var underscore = angular.module('underscore', []);
+underscore.factory('_', ['$window', function($window) {
+  return $window._; // assumes underscore has already been loaded on the page
+}]);
 
 
-.controller('MainController', function($scope, socket){
+angular.module('app', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache', 'underscore'])
+
+.controller('MainController', function($scope, socket, _){
   $scope.loading = true;
-  //courses is a JSON object for socket.io
+  
   $scope.courses = {};
   $scope.coursesArray = [];
   $scope.user = undefined;
 
   var buildCoursesArray = function(){
-    for (key in $scope.courses) {
-      $scope.coursesArray.push($scope.courses[key]);
-    }
+    let newArr = [];
+    for (var key in $scope.courses) {
+      newArr.push($scope.courses[key]);      
+    };
+    console.log(newArr);
+    $scope.coursesArray = _.uniq(newArr);
   };
 
-  var updateMealOnClient = function(obj){
-    $scope.courses = obj;
-    buildCoursesArray();
+
+  
+  var updateMealOnClient = function(obj){    
+    if(Array.isArray(obj)) {
+      $scope.coursesArray = obj;
+    } else {
+      $scope.courses = obj;
+      buildCoursesArray();      
+    }
   };
 
   var changeToMeal = function(){
@@ -28,7 +42,7 @@ angular.module('app', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache'])
     console.log(val,"socketCB called!");
   };
 
-  socket.on("updateMeal", changeToMeal);
+  socket.on("updateMeal", updateMealOnClient);
 
   //attaching the functions to scope because lazy, should be services
 
@@ -44,21 +58,23 @@ angular.module('app', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache'])
 
   $scope.addFood = function(food, course){
     //check courses object for course
-    if($scope.user && !$scope.courses[{food:{"food":food,"user":$scope.user,"course":course}}]) {
-      Object.assign($scope.courses,{food:{"food":food,"user":$scope.user,"course":course}});
+    let foodData={[food]:{"food":food,"user":$scope.user,"course":course}};
+    console.log(foodData);
+    if($scope.user && !_.contains($scope.courses,foodData)) {
+      Object.assign($scope.courses, foodData);
+      console.log('56',$scope.courses);
       buildCoursesArray();
+      changeToMeal();      
     };
-    changeToMeal();
   };
 
   $scope.removeFood = function(index){
     //delete from coursesArray
-    $scope.coursesArray.splice(index);
+    $scope.coursesArray.splice(index,1);
     let newCoursesObj = $scope.coursesArray.reduce((accum, val, i)=>{
       accum[i] = val;
       return accum;
     },{});
-    console.log($scope.coursesArray);
     $scope.courses = newCoursesObj;
     changeToMeal();
   };
@@ -100,7 +116,6 @@ angular.module('app', ['ngMaterial', 'ngMessages', 'material.svgAssetsCache'])
     emit: emit
   };
 });
-
 
 
 

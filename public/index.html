@@ -71,7 +71,7 @@
       <h3 ng-if="!coursesArray.length"> Nothing signed up for... yet</h3>
       <md-list layout="column" layout-align="center center">
         <md-list-item ng-repeat="food in coursesArray track by $index" >
-        <div class="md-list-item-text" layout="column"> 
+        <div class="md-list-item-text" layout="column" layout-align="center center"> 
           <div layout="row">
             <h3>{{ food.food }}</h3>           
             <h4>{{ food.course }}</h4>
@@ -93,7 +93,8 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js"></script>
 
-    <script src="main.js" ></script>
+    <script src="main.js"></script>
   </body>
 </html>

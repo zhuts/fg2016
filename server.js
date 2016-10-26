@@ -22,14 +22,21 @@ app.get('/', function(req, res){
   res.sendFile('public/index.html');
 });
 
+
+
 io.on('connection', function(socket){
   console.log('a user connected');
+
   socket.emit('updateMeal', mealData);
+
+  socket.on('changeToMeal', function(data){
+    mealData = data;
+    console.log("changeToMeal received", mealData);
+    socket.emit('updateMeal', mealData);
+  });
+
 });
 
-io.on('changeToMeal', function(){
-  console.log("changeToMeal");
-});
 
 
 server.listen(port, function(){
